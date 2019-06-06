@@ -24,25 +24,12 @@ CREATE TABLE Trip (
   time_in datetime NOT NULL);
 
 /* Restricciones a tablas existentes para crear Primary Keys y Foreign Keys */
-
 ALTER TABLE Company ADD CONSTRAINT PK2 PRIMARY KEY(ID_comp);
 ALTER TABLE Pass_in_trip ADD CONSTRAINT PK_pt PRIMARY KEY(trip_no, date, ID_psg);
 ALTER TABLE Passenger ADD CONSTRAINT PK_psg PRIMARY KEY(ID_psg);
 ALTER TABLE Trip ADD CONSTRAINT PK_t PRIMARY KEY(trip_no);
 ALTER TABLE Pass_in_trip ADD CONSTRAINT FK_Pass_in_trip_Passenger FOREIGN KEY(ID_psg) REFERENCES Passenger (ID_psg);
 ALTER TABLE Pass_in_trip ADD CONSTRAINT FK_Pass_in_trip_Trip FOREIGN KEY(trip_no) REFERENCES Trip (trip_no);
-
-/* Restricciones tipo Check */
-ALTER TABLE Passenger ADD CONSTRAINT Chk_viajes CHECK (viajes >= 0 AND viajes <= 50); -- El límite de viajes es de 50 y debe ser mayor a cero
-ALTER TABLE Passenger ADD CONSTRAINT Chk_genero CHECK (genero IN (’F’, ’M’)); -- El genero solo puede ser F de femenino o M de masculino
-
-/* Test de restricciones */
-INSERT INTO Passenger VALUES (110, 'Carlos Santana', 51, 'M'); -- El número de viajes es 51 > 50
-INSERT INTO passenger VALUES (110, 'Carlos Santana', -1, 'M'); -- El número de viajes de -1 < 0
-UPDATE Passenger SET genero = 'T' WHERE ID_psg = 1; -- Este es inválido porque el genero o es F o es M
-
-/* Sentencias case */
-SELECT ID_psg, name, CASE WHEN id_psg <= 20 THEN ’VIP’ ELSE ’normal’ END Catergoria FROM passenger; -- Aquellos pasajeros con id menor igual a 20 son VIP, los demás son normal
 
 /* Datos de compañia*/
 INSERT INTO Company VALUES(1, 'Don_avia');
@@ -145,9 +132,107 @@ INSERT INTO Pass_in_trip VALUES(7771,'20051114 00:00:00.000',14,'4d');
 INSERT INTO Pass_in_trip VALUES(7771,'20051116 00:00:00.000',14,'5d');
 INSERT INTO Pass_in_trip VALUES(7772,'20051129 00:00:00.000',14,'1c');
 
-/* Consultas */
+/* Nuevos atributos en tabla Passenger */
+ALTER TABLE Passenger ADD viajes integer;
+ALTER TABLE Passenger ADD genero char(1);
 
-SELECT * FROM Passenger;
-SELECT * FROM Company;
+/* Restricciones tipo Check */
+ALTER TABLE Passenger ADD CONSTRAINT Chk_viajes CHECK (viajes >= 0 AND viajes <= 50); -- El límite de viajes es de 50 y debe ser mayor a cero
+ALTER TABLE Passenger ADD CONSTRAINT Chk_genero CHECK (genero IN ('F', 'M')); -- El genero solo puede ser F de femenino o M de masculino
 
-SELECT ID_psg FROM Passenger WHERE ID_psg NOT IN (SELECT ID_psg FROM Pass_in_trip);
+/* Actualización de genero de pasajeros */
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 1;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 2;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 3;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 4;
+UPDATE Passenger SET genero = 'F' WHERE ID_psg = 5;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 6;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 7;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 8;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 9;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 10;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 11;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 12;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 13;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 14;
+UPDATE Passenger SET genero = 'F' WHERE ID_psg = 15;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 16;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 17;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 18;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 19;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 20;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 21;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 22;
+UPDATE Passenger SET genero = 'F' WHERE ID_psg = 23;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 24;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 25;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 26;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 27;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 28;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 29;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 30;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 31;
+UPDATE Passenger SET genero = 'M' WHERE ID_psg = 37;
+
+/* Test de restricciones */
+-- INSERT INTO Passenger VALUES (110, 'Carlos Santana', 51, 'M'); -- El número de viajes es 51 > 50
+-- INSERT INTO passenger VALUES (110, 'Carlos Santana', -1, 'M'); -- El número de viajes de -1 < 0
+-- UPDATE Passenger SET genero = 'T' WHERE ID_psg = 1; -- Este es inválido porque el genero o es F o es M
+
+/* Nuevo atributo en tabla Passenger */
+ALTER TABLE Passenger ADD categoria char(20);
+
+/* Muestra la cantidad de viaje spor pasajero */
+SELECT ID_psg, COUNT(*) FROM Pass_in_trip GROUP BY ID_psg;
+
+/* Actualización de genero de pasajeros */
+UPDATE Passenger SET viajes = 3 WHERE ID_psg = 1;
+UPDATE Passenger SET viajes = 1 WHERE ID_psg = 2;
+UPDATE Passenger SET viajes = 2 WHERE ID_psg = 3;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 4;
+UPDATE Passenger SET viajes = 3 WHERE ID_psg = 5;
+UPDATE Passenger SET viajes = 2 WHERE ID_psg = 6;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 7;
+UPDATE Passenger SET viajes = 3 WHERE ID_psg = 8;
+UPDATE Passenger SET viajes = 1 WHERE ID_psg = 9;
+UPDATE Passenger SET viajes = 3 WHERE ID_psg = 10;
+UPDATE Passenger SET viajes = 3 WHERE ID_psg = 11;
+UPDATE Passenger SET viajes = 1 WHERE ID_psg = 12;
+UPDATE Passenger SET viajes = 2 WHERE ID_psg = 13;
+UPDATE Passenger SET viajes = 4 WHERE ID_psg = 14;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 15;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 16;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 17;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 18;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 19;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 20;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 21;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 22;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 23;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 24;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 25;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 26;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 27;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 28;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 29;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 30;
+UPDATE Passenger SET viajes = 0 WHERE ID_psg = 31;
+UPDATE Passenger SET viajes = 4 WHERE ID_psg = 37;
+
+/* Sentencias case */
+SELECT ID_psg, categoria =
+	CASE
+ 		WHEN viajes > 10 AND genero = 'F' THEN 'VIP_F'
+		WHEN viajes > 10 AND genero = 'M' THEN 'VIP_M'
+		ELSE 'NO_VIP'
+	END, genero, viajes FROM Passenger;
+
+/* Diferencia entre char y varchar */
+SELECT CAST('ABC' AS CHAR(10));
+SELECT CAST('ABC' AS VARCHAR(10));
+/* El char siempre tiene 10 bytes mientras que varchar significa que maximo guarda 10 caracteres */
+
+/* Uso de NOT IN */
+SELECT ID_psg FROM Passenger WHERE ID_psg NOT IN (SELECT ID_psg FROM Pass_in_trip) AND genero = 'F';
+SELECT ID_psg FROM Passenger WHERE ID_psg NOT IN (SELECT ID_psg FROM Pass_in_trip) AND genero = 'M';
+
